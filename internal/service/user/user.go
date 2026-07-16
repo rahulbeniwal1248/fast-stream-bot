@@ -177,6 +177,9 @@ func (s *svc) GetUserInfo(ctx context.Context, m *tg.Message, e tg.Entities) *Tg
 
 	switch peer := m.PeerID.(type) {
 	case *tg.PeerUser:
+		if e.Users[peer.UserID] == nil {
+			return nil
+		}
 		tgUser = NewTgUser(peer.UserID, e.Users[peer.UserID].Username,
 			e.Users[peer.UserID].FirstName,
 			e.Users[peer.UserID].LastName,
@@ -184,6 +187,9 @@ func (s *svc) GetUserInfo(ctx context.Context, m *tg.Message, e tg.Entities) *Tg
 	default:
 		if m.FromID != nil {
 			if fromUser, ok := m.FromID.(*tg.PeerUser); ok {
+				if e.Users[fromUser.UserID] == nil {
+					return nil
+				}
 				tgUser = NewTgUser(fromUser.UserID, e.Users[fromUser.UserID].Username,
 					e.Users[fromUser.UserID].FirstName,
 					e.Users[fromUser.UserID].LastName,

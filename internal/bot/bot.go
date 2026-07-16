@@ -95,6 +95,10 @@ func (b *Bot) validateAndGetUser(ctx context.Context, m *tg.Message,
 	e tg.Entities, builder *message.Builder,
 ) (*user.TgUser, *repo.User, error) {
 	userInfo := b.userService.GetUserInfo(ctx, m, e)
+	if userInfo == nil {
+		slog.Error("Failed to resolve Telegram user from message")
+		return nil, nil, fmt.Errorf("Internal server error")
+	}
 	dbUser, err := b.userService.GetUserByTgID(ctx, userInfo.ID)
 	if err != nil {
 		if !errors.Is(err, types.ErrorNotFound) {

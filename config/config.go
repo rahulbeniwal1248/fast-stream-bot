@@ -11,7 +11,7 @@ import (
 
 const (
 	ENVIRONMENT_LOCAL = "local"
-	ENVIRONMENT_PROD  = "porduction"
+	ENVIRONMENT_PROD  = "production"
 )
 
 type ShortnerConfig struct {
@@ -61,7 +61,10 @@ type Config struct {
 
 func perseTokens(tokenString string) (s []string) {
 	for token := range strings.SplitSeq(tokenString, " ") {
-		s = append(s, strings.TrimSpace(token))
+		token = strings.TrimSpace(token)
+		if token != "" {
+			s = append(s, token)
+		}
 	}
 	return
 }
